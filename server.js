@@ -4,20 +4,28 @@ var path = require('path');
 var bodyParser = require("body-parser"); //
 // var articlesController = require("./controllers/artcls");
 var config = require('./config')
-    // var db = require("./db");
+var log = require('./libs/log')(module);
+// var db = require("./db");
 
 var app = express();
 app.set('port', config.get('port'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// db.connect("mongodb://localhost:27017/myblog", function(err) {
-//     if (err) {
-//         return console.log(err);
-//     }
+app.use(function(err, req, res, next) {
+        if (app.get('env') == 'development') {
+            var erroHandler = express.erroHandler();
+            erroHandler(err, req, res, next)
+        } else {
+            res.send(500)
+        }
+    })
+    // db.connect("mongodb://localhost:27017/myblog", function(err) {
+    //     if (err) {
+    //         return console.log(err);
+    //     }
 http.createServer(app).listen(app.get('port'), function() {
-    console.log("I am working only for you, my Lord")
+    log.info("I am working only for you, my Lord" + config.get('port'))
 });
 // });
 
