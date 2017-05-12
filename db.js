@@ -1,20 +1,20 @@
-var MongoClient = require("mongodb").MongoClient;
-var state = {
-    db: null
-};
-exports.connect = function (url, done) {
-     if(state.db) {
-         return done();
-     }
-     MongoClient.connect(url, function (err, db) {
-         if(err) {
-             return done(err);
-         }
-         state.db = db;
-         done();
-     });
-};
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
 
-exports.get = function () {
-    return state.db;
-};
+var articleSchema = mongoose.Schema({
+    name: String,
+    article: String,
+    date: Date
+})
+
+
+var Cat = mongoose.model('Cat', { name: String });
+
+var kitty = new Cat({ name: 'Zildjian' });
+kitty.save(function(err) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log('meow');
+    }
+});
